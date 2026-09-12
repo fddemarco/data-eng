@@ -1,0 +1,10 @@
+jaffle_shop_1:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      database: "{{ env_var('DATABRICKS_DEFAULT_CATALOG') }}"
+      schema: "{{ env_var('DATABRICKS_DEFAULT_SCHEMA') }}"
+      host: "{{ env_var('DATABRICKS_HOST') }}"
+      http_path: "{{ env_var('DATABRICKS_SQL_CLUSTER_ENDPOINT') }}"
+      token: "{{ env_var('DATABRICKS_TOKEN') }}"

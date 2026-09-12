@@ -1,4 +1,4 @@
-jaffle_shop_1:
+default:
   target: dev
   outputs:
     dev:

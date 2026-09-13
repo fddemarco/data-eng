@@ -30,6 +30,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 
 models:
+  +schema: "{{ env_var('DBT_USERNAME') }}"
   jaffle_shop:
     +materialized: view
 flags:

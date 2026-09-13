@@ -1,2 +1,5 @@
 .env
 dbt_packages/*
+target/*
+.user.yml
+logs/*

@@ -5,6 +5,7 @@ sources:
     tables:
       - name: customers
       - name: orders
+        description: '{{ doc("orders") }}'
         config:
           freshness:
               warn_after:

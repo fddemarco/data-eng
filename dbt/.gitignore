@@ -4,3 +4,4 @@ target/*
 .user.yml
 logs/*
 dbt_internal_packages/
+analysis/*

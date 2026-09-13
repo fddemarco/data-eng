@@ -33,6 +33,9 @@ models:
   +schema: "{{ env_var('DBT_USERNAME') }}"
   +static_analysis: strict
   jaffle_shop:
-    +materialized: view
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
 flags:
   require_generic_test_arguments_property: true

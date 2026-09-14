@@ -29,6 +29,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # as tables. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
 
+snapshots:
+  +schema: "{{ env_var('DBT_USERNAME') }}"
+
 models:
   +schema: "{{ env_var('DBT_USERNAME') }}"
   +static_analysis: strict

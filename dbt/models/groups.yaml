@@ -1,0 +1,5 @@
+groups:
+  - name: finance
+    owner:
+      email: alice@example.com
+      

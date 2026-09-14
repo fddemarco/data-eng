@@ -4,6 +4,7 @@ models:
     config:
       materialized: table
       contract: {enforced: true}
+      access: protected
     columns:
       - name: order_id
         data_type: int

@@ -35,6 +35,7 @@ snapshots:
 models:
   +schema: "{{ env_var('DBT_USERNAME') }}"
   +static_analysis: strict
+  +group: finance
   jaffle_shop:
     staging:
       +materialized: view

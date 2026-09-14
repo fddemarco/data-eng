@@ -3,5 +3,5 @@ select
     user_id as customer_id,
     order_date,
     amount,
-    status
+    status as status_description
 from {{ source("jaffle_shop", "orders") }}

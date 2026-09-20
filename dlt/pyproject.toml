@@ -1,0 +1,13 @@
+[project]
+name = "loader"
+version = "0.1.0"
+description = "dlt Primer"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "dlt[duckdb]>=1.30.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"

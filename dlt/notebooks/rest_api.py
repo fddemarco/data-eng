@@ -6,6 +6,17 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
+    import marimo as mo
+    import duckdb
+    import time
+
+
+
+    return duckdb, mo, time
+
+
+@app.cell
+def _():
     from typing import Any, Optional
 
     import dlt
@@ -38,8 +49,7 @@ def _():
 
 
 @app.cell
-def _():
-    import time
+def _(time):
 
     def rate_limit(response, *args, **kwargs):
         time.sleep(0.2)
@@ -64,7 +74,7 @@ def _(
         # Use RESTAPIConfig to get autocompletion and type checking
         print("Token configured:", bool(access_token))
         print("Token prefix:", access_token[:4] + "..." if access_token else None)
-    
+
         config: RESTAPIConfig = {
             "client": {
                 "base_url": "https://api.github.com/repos/dlt-hub/dlt/",
@@ -175,7 +185,7 @@ def _(dlt, github_source, token):
         load_info = pipeline.run(github_source(access_token))
         print(load_info)  # noqa: T201
 
-    return (load_github,)
+    return
 
 
 @app.cell
@@ -228,32 +238,104 @@ def _(check_connection, dlt, rest_api_source):
 
 
 @app.cell
-def _(load_github):
-    load_github()
+def _():
+    #load_github()
     #load_pokemon()
     return
 
 
 @app.cell
-def _():
-    import duckdb
-
+def _(duckdb):
     with duckdb.connect(f"rest_api_github.duckdb") as _conn:
-        df = _conn.sql(f"SELECT * FROM rest_api_data.contributors").pl() # fetch_arrow_table(), show()
-    df
-    return (duckdb,)
+        _df = _conn.sql(f"SELECT * FROM rest_api_data.contributors").pl() # fetch_arrow_table(), show()
+    _df
+    return
 
 
 @app.cell
 def _(duckdb):
     with duckdb.connect(f"rest_api_github.duckdb") as _conn:
-        df_issues = _conn.sql(f"SELECT * FROM rest_api_data.issues").pl() # fetch_arrow_table(), show()
-    df_issues
+        _df_issues = _conn.sql(f"SELECT * FROM rest_api_data.issues").pl() # fetch_arrow_table(), show()
+    _df_issues
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## SQL Database
+    """)
+    return
+
+
+@app.cell
+def _(dlt):
+    from dlt.sources.sql_database import sql_database
+
+
+    sql_source = sql_database(
+        table_names=[
+            "family",
+        ],
+    )
+
+    sql_db_pipeline = dlt.pipeline(
+        pipeline_name="sql_database_example",
+        destination="duckdb",
+        dataset_name="sql_data",
+    )
+
+    load_info = sql_db_pipeline.run(sql_source)
+    print(load_info)
+    return
+
+
+@app.cell
+def _(duckdb):
+
+    with duckdb.connect(f"sql_database_example.duckdb") as _conn:
+        _df = _conn.sql(f"SELECT * FROM sql_data.family").pl() # fetch_arrow_table(), show()
+    _df
     return
 
 
 @app.cell
 def _():
+    import os
+    import requests
+
+    folder_name = "local_data"
+    os.makedirs(folder_name, exist_ok=True)
+    full_path = os.path.abspath(folder_name)
+
+    url = "https://www.timestored.com/data/sample/userdata.parquet"
+    resp = requests.get(url)
+    resp.raise_for_status()
+
+    with open(f"{full_path}/userdata.parquet", "wb") as f:
+        f.write(resp.content)
+    return (full_path,)
+
+
+@app.cell
+def _(dlt, full_path):
+    from dlt.sources.filesystem import filesystem, read_parquet
+
+    filesystem_resource = filesystem(bucket_url=full_path, file_glob="**/*.parquet")
+    filesystem_pipe = filesystem_resource | read_parquet()
+
+    # We load the data into the table_name table
+    fs_pipeline = dlt.pipeline(pipeline_name="my_pipeline", destination="duckdb")
+    fs_pipeline.run(filesystem_pipe.with_name("userdata"))
+
+    return
+
+
+@app.cell
+def _(duckdb):
+    with duckdb.connect(f"my_pipeline.duckdb") as _conn:
+        _df = _conn.sql(f"SELECT * FROM my_pipeline_dataset.userdata").pl() # fetch_arrow_table(), show()
+    _df
     return
 
 

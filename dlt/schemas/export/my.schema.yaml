@@ -1,5 +1,5 @@
-version: 6
-version_hash: gWC0/BaYGPZ9Wo9Rui8IHybzLZBGoSk5RlDt4tC3Nfc=
+version: 2
+version_hash: RMB2lu98XR6pWqLVdUGlZFSoBjtSmJSN2Nq3W2tQ4O8=
 engine_version: 11
 name: my
 tables:
@@ -47,7 +47,7 @@ tables:
     write_disposition: skip
     resource: _dlt_loads
     description: Created by DLT. Tracks completed loads
-  items:
+  copy:
     columns:
       id:
         data_type: bigint
@@ -61,7 +61,7 @@ tables:
         unique: true
         row_key: true
     write_disposition: append
-    resource: items
+    resource: copy
     x-normalizer:
       seen-data: true
   _dlt_pipeline_state:
@@ -96,80 +96,6 @@ tables:
     write_disposition: append
     file_format: preferred
     resource: _dlt_pipeline_state
-    x-normalizer:
-      seen-data: true
-  items__nested:
-    columns:
-      id:
-        data_type: bigint
-        nullable: true
-      _dlt_parent_id:
-        data_type: text
-        nullable: false
-        parent_key: true
-      _dlt_list_idx:
-        data_type: bigint
-        nullable: false
-      _dlt_id:
-        data_type: text
-        nullable: false
-        unique: true
-        row_key: true
-    parent: items
-    x-normalizer:
-      seen-data: true
-  items_copy:
-    columns:
-      id:
-        data_type: bigint
-        nullable: true
-      _dlt_load_id:
-        data_type: text
-        nullable: false
-      _dlt_id:
-        data_type: text
-        nullable: false
-        unique: true
-        row_key: true
-    write_disposition: append
-    resource: items_copy
-    x-normalizer:
-      seen-data: true
-  items_copy__nested:
-    columns:
-      id:
-        data_type: bigint
-        nullable: true
-      _dlt_parent_id:
-        data_type: text
-        nullable: false
-        parent_key: true
-      _dlt_list_idx:
-        data_type: bigint
-        nullable: false
-      _dlt_id:
-        data_type: text
-        nullable: false
-        unique: true
-        row_key: true
-    parent: items_copy
-    x-normalizer:
-      seen-data: true
-  copy:
-    columns:
-      id:
-        data_type: bigint
-        nullable: true
-      _dlt_load_id:
-        data_type: text
-        nullable: false
-      _dlt_id:
-        data_type: text
-        nullable: false
-        unique: true
-        row_key: true
-    write_disposition: append
-    resource: copy
     x-normalizer:
       seen-data: true
   copy__nested:
@@ -215,9 +141,5 @@ normalizers:
   json:
     module: dlt.common.normalizers.json.relational
 previous_hashes:
-- F30NenS6qjRMu4OJjHq1y7Cd8ha4D6bnWqlXM6gwGpA=
-- vqLKBu3Dj3A32b1aeN/pBmhoTNizGF6BlCsdQWppm1E=
-- dZ8BHT38tZEEbWeWnBjFLNV2HK5NmoMXMwYvEh+4pog=
-- CvRjDAAB9q95SnxtUNtyp2lawzrWswmmOskX2QH2JmY=
-- z4ZcSZEBpCAzQOzmx3enmm0ym2VDuPgSkdA8QZ0/mck=
-- lQ0zxcSEONWR/h7Sdl9vV3yWyFwkYM5uMpNWqAr44Zs=
+- TinQYSxDafB+7SimlEZvQaq90HaX1Ef6BcLttQfkCIo=
+- HaZkU1XRnpQmaGdCgx5Jq3RdxIuQTXHebwa9AV1t9Ps=

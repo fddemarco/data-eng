@@ -7,10 +7,10 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
-
+    import duckdb
     import dlt
 
-    return dlt, mo
+    return dlt, duckdb, mo
 
 
 @app.cell
@@ -24,33 +24,35 @@ def _(dlt):
             {"id": 2},
             {"id": 3, "nested": [{"id": 1}, {"id": 2}]},
         ]
-    pipeline.extract(
-        data,
-        table_name="items",
-    )
-    pipeline.normalize()
-    load_info = pipeline.load(workers=20)
-    print(load_info)
-
-    pipeline.run(data, table_name="copy") # Triggers schema export
-    return (load_info,)
+    #pipeline.extract(
+    #    data,
+    #    table_name="items",
+    #)
+    #pipeline.normalize()
+    #load_info = pipeline.load(workers=20)
+    #print(load_info)
+    return data, pipeline
 
 
 @app.cell
-def _(load_info):
-    load_info.load_packages[0].schema
+def _(data, pipeline):
+    pipeline.run(data, table_name="copy") # Triggers schema export
     return
 
 
 @app.cell
-def _(mo):
-    import duckdb
-
+def _(duckdb, mo):
     with duckdb.connect("my_pipeline.duckdb") as _conn:
-        _df = _conn.sql("SELECT * FROM my_pipeline_dataset.items").pl()
-        _df2 = _conn.sql("SELECT * FROM my_pipeline_dataset.items__nested").pl()
+        _df = _conn.sql("SELECT * FROM my_pipeline_dataset._dlt_pipeline_state").pl()
+        _df1 = _conn.sql("SELECT * FROM my_pipeline_dataset.copy").pl()
+        _df2 = _conn.sql("SELECT * FROM my_pipeline_dataset.copy__nested").pl()
 
-    mo.vstack([_df, _df2])
+    mo.vstack([_df, _df1, _df2])
+    return
+
+
+@app.cell
+def _():
     return
 
 
